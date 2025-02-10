@@ -3,6 +3,9 @@ package korweb.model.dto;
 import korweb.model.entity.BoardEntity;
 import lombok.*;
 
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 @ToString
@@ -21,6 +24,8 @@ public class BoardDto {
     private String mid; // 작성자의 회원 아이디
     private String cname; // 카테고리명
 
+    // + 댓글 리스트
+    private List<Map<String, String>> replylist;
 
     // Dto --> toEntity 변환 메소드
     // dto -> entity 객체로 변환해서 데이터베이스에 저장해야 하므로 변환이 필요하다

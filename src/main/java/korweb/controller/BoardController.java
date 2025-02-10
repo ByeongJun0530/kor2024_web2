@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class BoardController {
@@ -37,9 +38,43 @@ public class BoardController {
     public boolean boardUpdate(@RequestBody BoardDto boardDto){
         return boardService.boardUpdate(boardDto);
     }
-    // [4] 게시물 수정
+    // [4] 게시물 삭제
     @DeleteMapping("/board/delete.do")
     public boolean boardDelete(@RequestParam int bno){
         return boardService.boardDelete(bno);
     }
+
+    // ===================== 댓글 ======================
+    // [5] 댓글 쓰기
+    @PostMapping("/reply/write.do")
+    public boolean replyWrite(@RequestBody Map<String, String> replyDto){ // * DTO 클래스 대신에 Map 컬렉션 활용
+        return boardService.replyWrite(replyDto);
+    }
+
+    // [6] 특정 게시물의 댓글 전체 조회
+    @GetMapping("/reply/findall.do")
+    public List<Map<String,String>> replyFindAll(@RequestParam int bno){
+        return boardService.replyFindAll(bno);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

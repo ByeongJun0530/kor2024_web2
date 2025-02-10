@@ -8,3 +8,19 @@
 
 /* 모든 폰트를 웹 폰트로 변경 */
 *{font-family: 'SBAggroB';}
+
+.infobox{
+    margin-top : 50px;
+    display : flex;
+    justify-content : space-between;
+}
+.btitle{
+    margin-top : 20px;
+    text-align : center;
+    font-size : 25px;
+}
+
+.bcontent{
+    margin-top : 15px;
+    mid-height : 300px
+}
