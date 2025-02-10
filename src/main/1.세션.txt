@@ -1,0 +1,45 @@
+[ 웹 서버 ]
+    1. 정의 : 클라이언트와 서버 간의 HTTP 를 이용한 요청과 응답을 반환하는 프로그램
+    2. 종류 :
+        0. Apache : C 기반의 서버 프로그램       , 정적페이지 지원, HTML/CSS/JS
+        1. Tomcat : 자바 기반의 웹 서버 프로그램  , 동적페이지 지원, JPS/타임리프
+        2. Apache Tomcat : 정적페이지와 동적페이지 모두 지원
+            -> Spring boot 은 apache tomcat 내장
+            -> 현재 Spring boot 3.x 는 Apache Tomcat 10.1 버전 사용.
+        3. 웹 서버 포트는 주로 8080
+        4. 통신 흐름
+
+
+[ 세션 ]
+    1. 정의 : tomcat(톰캣) 내장 서버에 데이터를 저장하고 관리할 수 있게 제공
+        -> Spring boot 프레임워크 사용하면 자동으로 tomcat 내장 서버 실행
+            -> @SpringBootApplication : 자동으로 tomcat 서버가 실행된다.
+    2. 목적 : 1.상태(데이터) 관리 2.인증/권한 3.효율적인 데이터 관리
+    3. 주 사용처 : 데이터베이스에 저장하지 않고 실시간으로 처리하는 데이터 혹은 보안이 중요한 데이터들
+        1. 로그인 상태 유지
+        2. (비회원제) 장바구니 기능
+        3. 사용자 설정 : 자동로그인, 테마 등등
+        4. 실시간 처리
+        등등
+    4. 세션 객체
+        1. HttpServletRequest : 서블렛(톰캣) 안에 (다양한) 데이터/정보 요청
+        2. .getSession() : 서블렛(톰캣) 안에 세션 객체를 호출하는 함수.
+    5. 세션에 정보를 저장하는 방법
+        1. @Autowired private HttpServletRequest request;
+        2. HttpSession httpSession = request.getSession();
+        3. request.getSession().setAttribute( "속성명", 값 );
+            * 내가 새로운 속성명으로 값을 추가했다면, 그 값 타입은 자동으로 Object 타입으로 변환된다.
+    6. 세션에 저장된 정보 반환하는 방법
+        1. @Autowired private HttpServletRequest request;
+        2. HttpSession httpSession = request.getSession();
+        3. httpSession.getAttribute("조회할 속성명");
+            * 내가 특정한 속성명의 값 호출했다면 그 값 타입은 무조건 Object 타입이다. (타입변환 필요)
+    7. 세션에 저장된 정보 삭제하는 방법
+        1. @Autowired private HttpServletRequest request;
+        2. HttpSession httpSession = request.getSession();
+        3. httpSession.removeAttribute("삭제할 속성명");
+    * 세션에 저장된 모든 정보들을 Object 타입으로 저장된다.
+        -> Object 클래스/타입은 자바의 최상위 클래스로 모든 인스턴스들을 저장할 수 있는 타입
+        -> [상속] 다형성?
+            업 캐스팅(자동 타입변환) : 상속관계에 자식 타입이 부모 타입으로 변환,
+            다운 캐스팅(강제 타입변환) : 부모타입이 자식 타입으로 변환

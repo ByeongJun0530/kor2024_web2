@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="~{ /header.html :: header }"></div>
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+
+                <div class="form-floating mb-3">
+                    <h5> 내정보 </h5>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" readonly value="qweqwe" class="form-control midInput" id="floatingInput" placeholder="ID">
+                    <label for="floatingInput">계정아이디</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" readonly value="강호동" class="form-control mnameInput" id="floatingInput" placeholder="Name">
+                    <label for="floatingInput">닉네임</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" readonly value="qweqwe@qwewqe.com" class="form-control memailInput" id="floatingInput" placeholder="Email">
+                    <label for="floatingInput">이메일</label>
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="button" onclick="location.href = '/member/update'"> 회원수정 </button>
+                <hr class="my-4">
+                <button class="w-100 btn btn-lg btn-primary" type="button" onclick="onDelete()"> 회원탈퇴 </button>
+            </form>
+        </div>
+        <!-- 오른쪽 구역 -->
+        <div class="col-lg-7 text-center text-lg-start">
+            <h6> 내 포인트 내역 </h6>
+            <table class="table" >
+                <thead>
+                    <tr> <th> # </th> <td> 지급일</td> <td> 지급내용 </td> <td> 지급량 </td> </tr>
+                </thead>
+                <tbody class="pointTable">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="/js/member/info.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+1. 프로젝트 만들기 : jdk17, gradle, groovy
+2. 프로젝트에 사용할 초기 라이브러리(dependencies)
+    - start.spring.io
+3. 프로젝트 폴더 세팅
+    java
+        korweb(최상위패키지)                  : 임의 패키지명 생성, 주로 홈페이명으로 한다.
+            AppStart 클래스                  : 스프링 시작
+            controller 패키지                : HTTP 매핑 관련 클래스들 패키지
+            model 패키지
+                - entity 패키지              : DB 매핑 관련 클래스
+                - dto 패키지                 : dto 데이터 이동객체 클래스
+                - repository 패키지          : entity 조작 인터페이스들
+            service 패키지                   : 자바의 비지니스 로직 처리하는 클래스
+    resource
+        application.properties              : 스프링 설정 파일.
+        static 패키지                        : 정적 파일(css, js, img 등등 )
+            css 패키지
+            js 패키지
+            img 패키지
+            favicon.ico
+        templates 패키지                     : 동적파일( 타임리프, JSP 등등 )
+
+4. 기본적인 application.properties 준비
+    1. server.port : spring web tomcat 서버의 port 변경
+    2. JDBC CONNECT
+
+5. 레이아웃, 프론트엔드 참고 사이트
+
+6. 로고 : favicon( 홈페이지 로고 )
+    1. 이미지 구하기.
+    2. ico 확장자로 변환 : https://convertio.co/kr/png-ico/
+    3. favicon.ico 으로 파일명과 확장자로 static 폴더에 넣어주기.
+    4. 서버 재시작, 브라우저 ctrl+f5(강력 새로고침)

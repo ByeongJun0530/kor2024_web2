@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 페이지</title>
+  <link href="/css/signup.css" rel="stylesheet">
+</head>
+<body>
+  <div th:replace="~{/header.html :: header}"></div> <!-- 헤더 포함 -->
+    <div class="wrapper">
+      <div class="form-signup">
+      <h2 class="form-signup-heading">회원가입</h2>
+        <form id="signupForm">
+          <input type="text" class="form-control midInput" name="mid" placeholder="아이디" required="" autofocus="" />
+          <input type="password" class="form-control mpwdInput" name="mpwd" placeholder="비밀번호" required=""/>
+          <input type="password" class="form-control mpwdCheckInput" name="mpwdConfirm" placeholder="비밀번호 확인" required=""/>
+          <input type="text" class="form-control mnameInput" name="mname" placeholder="이름" required=""/>
+          <input type="text" class="form-control memailInput" name="memail" placeholder="이메일" required=""/>
+          프로필 사진<input type="file" class="form-control uploadfile" name="uploadfile" placeholder="img" required=""/>
+          <button class="btn btn-lg btn-primary btn-block" type="button" onclick="onSignUp()">회원가입</button>
+        </form>
+      </div>
+    </div>
+  <script src="/js/member/signup.js"></script>
+</body>
+</html>

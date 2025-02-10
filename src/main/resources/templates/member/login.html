@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/login.css" rel="stylesheet">
+</head>
+<body>
+  <div th:replace="~{/header.html :: header}"></div>
+  <div class="container">
+    <div class="wrapper">
+      <form class="form-signin">
+        <h2 class="form-signin-heading">로그인</h2>
+        <input type="text" class="form-control midInput" name="mid" placeholder="아이디" required="" autofocus="" />
+        <input type="password" class="form-control mpwdInput" name="mpwd" placeholder="비밀번호" required=""/>
+        <label class="checkbox">
+          <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> 로그인 저장
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="onLogin()">로그인</button>
+      </form>
+    </div>
+  </div>
+  <script src = "/js/member/login.js"></script>
+</body>
+</html>
