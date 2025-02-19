@@ -2,6 +2,7 @@ package korweb.service;
 
 import korweb.model.dto.BoardDto;
 import korweb.model.dto.MemberDto;
+import korweb.model.dto.PageDto;
 import korweb.model.entity.BoardEntity;
 import korweb.model.entity.CategoryEntity;
 import korweb.model.entity.MemberEntity;
@@ -11,6 +12,10 @@ import korweb.model.repository.CategoryRepository;
 import korweb.model.repository.MemberRepository;
 import korweb.model.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +56,26 @@ public class BoardService {
         else {return false;} // 게시물 작성 실패
     }
     // [2] 게시물 전체 조회
-    public List<BoardDto> boardFindAll(int cno){
+    public PageDto boardFindAll(int cno, int page, String key, String keyword){
+        System.out.println("카테고리 번호 : " + cno);
+        System.out.println("페이지 : " + page);
+        // 페이징처리 방법 : 1.sql 2.라이브러리(*JPA*)
+        // 1. 페이징 처리 설정, PageRequest.of(페이지 번호, 페이지당 개수, 정렬);
+        Pageable pageable = PageRequest.of(page-1, 3, Sort.by(Sort.Direction.DESC, "bno"));
+        // 2. find~~~(pageable), find~~~(pageable) 매개변수로 설정 넣어주면 반환값은 Page
+
+
         // (1) 모든 게시물의 엔티티를 조회
-        List<BoardEntity> boardEntityList = boardRepository.findAll();
+        // List<BoardEntity> boardEntityList = boardRepository.findAll();
+        // (2) 모든 게시물의 엔티티를 조회 + 페이징 처리
+        //Page<BoardEntity> boardEntityList = boardRepository.findAll(pageable);
+        // (3) 특정한 카테고리의 엔티티를 조회 + 페이징처리
+        //Page<BoardEntity> boardEntityList = boardRepository.findByCategoryEntity_Cno(cno, pageable);
+        // (4) 특정한 카테고리의 키워드 검색 조회 + 페이징처리
+        Page<BoardEntity> boardEntityList = boardRepository.findBySearch(cno, key, keyword, pageable);
+
+        System.out.println(boardEntityList); // 확인용 출력
+
             // cno를 이용한 동일한 cno 게시물 정보 찾기
         // (2) 모든 게시물의 엔티티를 DTO로 변환
             // - DTO 를 저장할 리스트 선언
@@ -73,8 +95,33 @@ public class BoardService {
             }
             else { }
         });
+
         // (3)결과를 리턴한다.
-        return boardDtoList;
+        //return boardDtoList;
+        // [*] 페이징 처리된 게시물 정보(자료) 외 페이지 정보도 같이 반환한다.
+        // (1) 현재 페이지 번호
+        // (2) 전체 페이지 번호 = totalPage, JPA .getTotalPages(); 조회된 정보의 전체 페이지 수 반환 함수.
+        int totalPage = boardEntityList.getTotalPages();
+        // (3) 전체 조회된수 = totalCount, JPA 의 .getTotalElements();
+        long totalCount = boardEntityList.getTotalElements();
+        // (4) 조회 페이지의 페이지 버튼 시작 번호, 계산식 : ((현재페이지번호) - 1/페이징버튼 수)*페이징버튼수+1
+        int btnSize = 5; // 페이지당 표시할 페이지 버튼 수
+        int startBtn = ((page - 1)/btnSize)*btnSize+1;
+        // (5) 조회 페이지의 페이지 버튼 끝 번호, 계산식 : 시작버튼 번호 + (페이징 버튼 수 - 1)
+        int endBtn = startBtn + (btnSize - 1);
+            // 만약에 페이징버튼 끝 번호가 전체 페이지수 보다 같거나 크면 페이징번호 끝번호를 전체 페이지수로 고정
+        if (endBtn >= totalPage) endBtn = totalPage;
+        // 페이징 DTO/MAP 이용한 페이징 정보와 자료를 같이 응답/리턴하기
+        PageDto pageDto = PageDto.builder()
+                .totalpage(totalPage)
+                .totalcount(totalCount)
+                .page(page)
+                .startbtn(startBtn)
+                .endbtn(endBtn)
+                .data(boardDtoList)
+                .build();
+        // 페이징 dto 반환한다. 현재 함수의 반환타입 List<BoardDto> --> PageDto 수정
+        return pageDto;
     }
 
     // [3] 게시물 개별 조회
@@ -158,27 +205,30 @@ public class BoardService {
     }
 
     // [7] 댓글 전체 조회
-    public List<Map<String,String>> replyFindAll(int bno){
-
+    public List<Map<String,String> > replyFindAll( int bno ){
         // 1. 모든 댓글 엔티티 조회
         List<ReplyEntity> replyEntityList = replyRepository.findAll();
-        // 2. 모든 댓글 map 저장할 리스트 선언
-        List<Map<String, String>> replylist = new ArrayList<>();
-        // 3. 모든 댓글 엔티티 반복문으로 조회
-        replyEntityList.forEach((replyEntity -> {
-            // 4.
-            Map<String, String> map = new HashMap<>();
-            // 5. 맵 객체에 하나씩 key : value (엔트리) 으로 저장한다.
-            map.put("rno", replyEntity.getRno() + ""); // 숫자타입 + "" => 문자타입
-            map.put("rcontent", replyEntity.getRcontent()); // 숫자타입 + "" => 문자타입
-            map.put("cdate", replyEntity.getCdate().toLocalDate().toString()); // 생성된 날짜와 시간에서 날짜만 추출
-            map.put("mid", replyEntity.getMemberEntity().getMid()); // 댓글 작성자 아이디
-            map.put("mimg", replyEntity.getMemberEntity().getMimg());
-            // 6. map 리스트에 담는다
-            replylist.add(map);
-        }));
-        return null;
-    }
+        // 2. 모든 댓글 map 저장할 list 선언
+        List< Map<String,String> > replylist = new ArrayList<>();
+        // 3. 모든 댓글 엔티티를 반복문로 조회
+        replyEntityList.forEach( (reply) -> {
+            // * 만약에 현재 조회중인 게시물번호 와 댓글리스트내 반복중인 댓글의 게시물번호 와 같다면
+            if( reply.getBoardEntity().getBno() == bno ){
+                // 4. map 객체 선언
+                Map<String , String > map = new HashMap<>();
+                // 5. map 객체에 하나씩 key:value (엔트리) 으로 저장한다.
+                map.put( "rno" , reply.getRno()+"" );       // 숫자타입 +"" =>문자타입 변환
+                map.put( "rcontent" , reply.getRcontent() );
+                map.put( "cdate" , reply.getCdate().toLocalDate().toString() ); // 날짜와시간 중에 날짜만 추출
+                map.put( "mid" , reply.getMemberEntity().getMid() ); // 댓글 작성자 아이디
+                map.put( "mimg" , reply.getMemberEntity().getMimg() ); // 댓글 작성자 프로필
+                // 6. map를 리스트에 담는다.
+                replylist.add( map );
+            }
+        });
+        // 7. 반복문 종료후 반환한다.
+        return replylist;
+    } // f end
 }
 
 

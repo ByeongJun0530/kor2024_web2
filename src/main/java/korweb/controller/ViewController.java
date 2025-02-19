@@ -38,4 +38,9 @@ public class ViewController {
     // [8] 게시물 개별 조회 페이지 반환해주는 메소드
     @GetMapping("/board/view")
     public String boardView(){return "/board/view.html";}
+
+    // [9] 공공데이터 API 페이지 반환해주는 메소드
+    @GetMapping("/api1")
+    public String api1(){return "/api/api1.html";}
+
 }

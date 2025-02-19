@@ -1,31 +1,24 @@
 console.log('view.js opened')
 
 // [1] 개별 게시물 조회하기
-const onFind = () => {
-
+const onFind = () =>{
     // 1. 현재 보고자하는 게시물의 번호를 찾기 / 사용자가 클릭한 게시물 번호 찾기
-    // board/view?bno = 3, 즉] url 경로상의 queryString bno 존재한다.
-    // console.log(new URL()) // new URL() : url 정보를 담는 객체 생성
-    // console.log(new URL(location.href)) // 현재 페이지의 url 정보를 담은 객체 생성
-    // console.log(new URL(location.href).searchParams) // 현재 페이지의 url 정보 중 queryString 매개변수 반환 속성
-
-    const bno = new URL(location.href).searchParams.get('bno');
-
+    const bno = new URL( location.href ).searchParams.get('bno')
     // 2. fetch
-    fetch(`/board/find.do?bno=${bno}`)
-        .then(r => r.json())
-        .then(d => {
-            console.log(d);
-            document.querySelector('.midbox').innerHTML = d.mid
-            document.querySelector('.bviewbox').innerHTML = d.bview
-            document.querySelector('.cdatebox').innerHTML = d.cdate
+    fetch( `/board/find.do?bno=${ bno }` )
+        .then( r => r.json() )
+        .then( data => {
+            console.log( data );
+            document.querySelector('.midbox').innerHTML = data.mid
+            document.querySelector('.bviewbox').innerHTML = data.bview
+            document.querySelector('.cdatebox').innerHTML = data.cdate
 
-            document.querySelector('.btitle').innerHTML = d.btitle
-            document.querySelector('.bcontent').innerHTML = d.bcontent
+            document.querySelector('.btitle').innerHTML = data.btitle
+            document.querySelector('.bcontent').innerHTML = data.bcontent
         })
-        .catch(e => console.log(e))
+        .catch( e =>{ console.log(e); })
 }
-onFind(); // 페이지가 열릴 때 개별 게시물 조회 함수 실행
+onFind(); // 페이지가 열릴때 개별 게시물 조회 함수 실행
 
 // [2] 댓글 쓰기 요청 함수, 실행조건 : 댓글 작성 버튼 클릭시
 const onReplyWrite = () => {
@@ -56,6 +49,74 @@ const onReplyWrite = () => {
 }
 
 // [3] 개별 게시물의 댓글 조회 요청 함수
-const onReplyFindAll = () => {
+/*const onReplyFindAll = () => {
+    const bno = new URL(location.href).searchParams.get('bno')
+    // fetch
+    fetch(`/reply/findall.do?bno=${bno}`)
+        .then(r => r.json)
+        .then(data => {
+            console.log(data);
+            const replybox = document.querySelector('.replybox');
+            let html = ``;
+            // 반복문으로 html 요소 변환
+            data.forEach(reply => {
+                html += `
+                        <div class="reply" data-rno="${reply.rno}" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <!-- 프로필 이미지 -->
+                            <img src="/images/${reply.mimg || 'default.jpg'}" alt="프로필 이미지" style="width: 40px; height: 40px; border-radius: 50%;">
 
+                            <!-- 댓글 내용 -->
+                            <div>
+                            <p><strong>${reply.mid}</strong> <span style="color: gray; font-size: 12px;">(${reply.cdate})</span></p>
+                            <p>${reply.rcontent}</p>
+                            </div>
+                        </div>
+                        `;
+            })
+            replybox.innerHTML = html;
+        })
+        .catch(e => console.log(e));
 }
+*/
+// [3] 개별 게시물의 존재하는 댓글 조회 요청 함수
+const onReplyFindAll = ( ) => {
+	// [준비물] bno
+	const bno = new URL( location.href ).searchParams.get("bno");
+	// fetch queryString
+	fetch( `/reply/findall.do?bno=${bno}` )
+		.then( r => r.json() )
+		.then( data => {
+			console.log( data );
+			const replybox = document.querySelector('.replybox')
+			let html = ``;
+			data.forEach( reply =>{
+				html +=`<div class="card mt-3">
+						  <div class="card-header">
+						  	<img src="/img/${ reply.mimg}" style="width:30px;" />
+						    ${ reply.mid }
+						  </div>
+						  <div class="card-body">
+						     ${ reply.rcontent }
+						  </div>
+						</div>`
+			}); // for end
+			replybox.innerHTML = html;
+		})
+		.catch( e => { console.log(e); })
+} // class end
+onReplyFindAll();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+    <div th:replace="~{/header.html :: header}"></div>
+    <div class="container">
+
+        <h3> [API 활용4] chart.js 이용한 시각화 : https://www.chartjs.org/ </h3>
+        <h4>부평구 인구 현황 API 시각화</h4>
+        <div>
+            <canvas id="myChart2"></canvas>
+        </div>
+        <h4>chart.js 샘플데이터</h4>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <h3> [API 활용3] 미추홀구 맛있는 집 </h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>메뉴</th><th>업소명</th>
+                    <th>전화번호</th><th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="tasteTable1">
+
+            </tbody>
+        </table>
+
+        <h3> [API 활용2] 사업자 상태 조회</h3>
+        <input type="text" id="사업자번호입력상자"/>
+        <button type="button" onclick="api2()">검색</button>
+        <div> 조회 결과 : <span id="결과구역"></span></div>
+
+        <h3> [API 활용1] 부평구 인구 현황</h3>
+        <table class="table">
+            <thead>
+                <tr><th>동별</th><th>세대수</th>
+                    <th>인구수(계)</th><th>인구수(남)</th><th>인구수(여)</th>
+                </tr>
+            </thead>
+            <tbody id="boardTable1">
+
+            </tbody>
+        </table>
+    </div>
+    <!-- chart.js 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="/js/api/api1.js"></script>
+</body>
+</html>

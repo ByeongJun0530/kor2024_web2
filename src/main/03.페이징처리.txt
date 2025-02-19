@@ -1,0 +1,26 @@
+[ 페이징 처리 ]
+    1. 정의 : 대량의 데이터들을 특정한 개수로 나누어 조회할 때 사용되는 방법
+    2. 사용처 : 게시물 조회, 제품 조회 등등
+    3. *페이징 처리 대체 vs 무한 스크롤
+    4. 사용자로부터 page(페이지번호) 를 쿼리스트링(url?page=1) 사용
+    5. 방법 : 1. SQL / 2. 라이브러리(JPA)
+
+[ JPA 이용한 페이징 처리 ]
+    1. Pageable 인터페이스
+        import org.springframework.data.domain.Pageable;
+    2. PageRequest 클래스
+        PageRequest.of(페이지번호, 페이지 당 개수, 정렬)
+        (1) 페이지 번호 : 0번부터 시작하므로 1페이지 -> 0, 2페이지 -> 1, 3페이지 -> 2
+            page-1
+        (2) 페이지당 개수 : 하나의 페이지별 출력할 자료의 개수
+            3 : 페이지별 3개씩 조회
+        (3) 정렬 :
+            1. Sort.by(Sort.Direction.DESC, "정렬할 필드명")) : 지정한 필드명으로 내림차순
+                 Sort.by(Sort.Direction.DESC, "bno")) : 게시물번호(bno) 기준으로 내림차순
+            2. Sort.by(Sort.Direction.ASC, "정렬할 필드명")) : 지정한 필드명으로 오름차순
+            + sql : order by 필드명 asc/desc
+                Sort.by(Sort.Direction.DESC, "bview")) : 조회수(bview) 기준으로 내림차순 (인기순)
+    3. 특정한 조건의 페이징 처리
+         지정 repository 인터페이스에서 find~~~ 함수 만들기
+         주의할 점 : 자바 JPA 를 이용한 엔티티의 필드명 정의할 때 _(언더바) 지양한다.
+            - JPA 특정한 곳에서 _(언더바)를 기능적으로 사용하므로
