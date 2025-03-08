@@ -1,0 +1,68 @@
+
+[ 스프링 시큐리티 ]
+    1. 정의 : Spring 기반 의 인증 과 인가를 제공하는 프레임워크
+        [인가] : 특정 자료에 접근하기 위한 권한이 있는지 확인한 후 접근을 허용
+            예] 로그인 후 특정 페이지 접근 허용
+        [인증] : 특정 자료에 접근하기 위한 권한이 발급되었는지 확인 작업
+            예] 로그인 후 세션 정보 확인
+        [권한] : 특정 자료에 접근할 수 있는 권리가 주어짐, 액세스할 수 있는 자료와 제한된 자료을 제공하 수 있다.
+    2. 대표 기능
+        1. 로그인 2. 로그아웃 3. 소셜 로그인 4. CSRF공격 방지 5. 토큰 기반 인증 등등
+
+[1. 시큐리티 설치 ]
+    1. 그레이들에 라이브러리 추가
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+    2. 스프링 서버 실행
+        [*] 시큐리티 설치 이후 별다른 설정없이 'localhost:8080' 접속하면 시큐리티로그인창 확인할 수 있다.
+        -> JAVA console 창에서 기본 password 확인 할수 있다.
+        username : user
+        password : 74ba8783-f533-450e-a880-a7531d171ba4  <--- 본인 java console 창에서 확인 가능 합니다.
+
+[2. 시큐리티 설정 ]
+    1. 시큐리티 설정 클래스 만들기
+        - config폴더에 임의의클래스를 생성한다.  = SecurityConfig
+        - 클래스 위에 @Configuration 빈등록한다.
+    2. filterChain 함수를 만든다.
+        public SecurityFilterChain filterChain(HttpSecurity http ) throws Exception {}
+    3. HTTP URL 요청에 따른 권한/상태 확인후 자원 허가 제한 ,
+        (1) .antMatcher("/URL") ).permitAll(); : 지정한 URL은 모든 허가.
+        (2) .antMatcher("/URL") ).authenticated() : 지정한 URL은 인증된 회원만 허가.
+        (3) .antMatcher("/URL") ).hasRole() : 지정한 URL은 정의된 등급이면 회원만 허가.
+        (4) .antMatcher("/URL") ).hasAnyRole() : 지정한 URL은 정의된 여러 등급이 포함되면 허가
+
+        @Bean // 필드 또는 메소드에 빈 등록하는 방법
+        public SecurityFilterChain filterChain(HttpSecurity http ) throws Exception {
+            http.authorizeHttpRequests( ( httpReq ) -> {
+                    httpReq
+                            .requestMatchers( AntPathRequestMatcher.antMatcher("/board/write") ).authenticated()
+                            .requestMatchers( AntPathRequestMatcher.antMatcher("/chat") ).hasRole("USER")
+                            .requestMatchers( AntPathRequestMatcher.antMatcher("/admin") ).hasAnyRole( "admin" , "team1" )
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/**") ).permitAll();
+            } );
+
+            // [2] http 객체를 빌드/실행하여 보안 필터 체인을 생성
+            return http.build();
+        }
+
+    4. 암호화란?
+        - 사람이 정보를 이해할 수 없도록 자기만의 방법으로 변경
+        - 예] 비밀밀번호를 그대로 저장하지 않고 해싱[암호화]하여 저장
+        - 암호화 알고리즘 종류
+            BCrypt : 단방향 암호화 , new BCryptPasswordEncoder()
+            SHA-256 : 단방향 암호화 , MessageDigest.getInsance("SHA-256")
+            등등
+        - Bcrypt 사용법
+            1. BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
+            2. String result = bpe.encode( 암호화하고싶은자료 );
+            -> result 에 암호화된 결과를 저장할 수 있다.
+            * 암호화된 길이는 60자리의 문자열 ( 데이터베이스 필드 길이를 최소 60이상 )
+
+    5. CSRF : Cross Site Request Forgery ) 사이트 간 요청 위조
+        -> 기존의 사이트를 악성 사이트로 비슷한 URL 만들어서 인증하고 요청하는 해킹 방법
+        1. CSRF 해킹 방어 방법 : POST , PUT 요청를 차단한다.
+        2. 운영 단계
+            1. 특정한 URL은 CSRF 예외 처리 , http.csrf( csrf -> csrf.ignoringRequestMatchers("csrf예외할URL") );
+                -> CSRF 없을때는 대체자 : JWT( JSON WEB TOKEN )
+            2. CSRF 토큰 확인하여 인증된 토큰 발급자 허용
+        3. 개발 단계
+            1. CSRF 전체 끄기 , http.csrf(AbstractHttpConfigurer :: disable );

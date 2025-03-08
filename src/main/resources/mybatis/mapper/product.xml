@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- [2] xml 파일의 유효성 검사 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- [1] mapper 인터페이스의 추상메소드와 매핑할 SQL 작성 -->
+<mapper namespace="korweb.model.mapper.ProductMapper">
+    <!-- [2] ProductMapper 인터페이스 내 'int save(ProductDto productDto);' 매핑 설정 -->
+    <insert id="save">
+        insert into products (name, price) values (#{name}, #{price})
+    </insert>
+
+    <!-- [2] ProductMapper 인터페이스 내 'List<ProductDto> findAll()' 매핑 설정 -->
+    <select id="findAll">
+        select* from products
+    </select>
+
+    <!-- [3] ProductMapper 인터페이스 내 'ProductDto find();' 매핑 설정 -->
+    <select id="find">
+        select* from products where id = #{id}
+    </select>
+
+    <!-- [4] ProductMapper 인터페이스 내 'boolean update();' 매핑 설정 -->
+    <update id="update">
+        update products set name = #{name}, price = #{price} where id = #{id}
+    </update>
+
+    <!-- [5] ProductMapper 인터페이스 내 'boolean delete();' 매핑 설정 -->
+    <delete id="delete">
+        delete from products where id = #{id}
+    </delete>
+</mapper>

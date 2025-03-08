@@ -65,6 +65,32 @@ const myPointInfo = () => {
         .catch(e => console.log(e))
 }
 
+/*
+// 클라이언트 웹 소켓 연결
+const loginSocket = new WebSocket('ws://localhost:8080/socket/login')
+// 로그인 알림 받기
+loginSocket.onopen = (event) => {
+    console.log('서버 소켓 연동 성공')
+}
+// 로그인 알림받기
+loginSocket.onmessage = (event) => {
+    console.log(event.date);
+    
+}
+// 로그인 성공시 서버에게 알림 전송
+
+// 토스트 js
+const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+if (toastTrigger) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}
+*/
+
 
 
 

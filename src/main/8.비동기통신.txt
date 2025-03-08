@@ -1,0 +1,65 @@
+[ 동기식 통신 vs 비동기식 통신 ]
+    ( 동기식 )
+    1. 데이터 요청을 보내고 응답을 받을 떄 까지 대기 상태
+    2. 즉]응답을 받을 때까지 대기 상태
+    3. 순차처리 : HTTP, 파일처리 등등 ( 일반적인 홈페이지 )
+    4. 응답을 기다리므로 전체적으로 속도가 느릴수 있다.
+
+    ( 비동기식 )
+    1. 데이터 요청을 보내고 즉시 응답을 받지 않고 응답이 올떄 처리 상태
+    2. 즉]응답을 기다리지 않고 다른 작업을 수행할 수 있는 상태
+    3. 병렬처리 : 채팅 , Node.js 등등 ( 소셜 홈페이지 )
+    4. 여러 작업을 동시에 수행하므로 전체적으로 속도가 빠를수 있다.
+
+    비동기 API : fetch(JS내장) , axios(Node.js) , ajax(jquery) 등등
+
+    ex]
+        주문1.강호동이 '커피'3잔 '빵'1개 '파스타'1개 주문
+        주문2.유재석이 '커피'1잔 주문
+        ---> 방법1: 처리순으로 , 방법2 : 주문순으로
+        ---> 처리순으로(비동기식) , 주문순으로(동기식)
+
+[ AXIOS ]
+    1. 정의 : node.js 기반으로 Promise 함수를 사용하는 라이브러리
+    2. 특징
+        1. fetch 보다 간결한 문법 제공
+        2. 응답 데이터를 자동으로 JSON 변환
+    3. 설치
+        ( CDN ) : <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    4. 문법
+        (*) fetch
+        fetch( '통신할경로' , { option } )
+            .then( response =>  response.json() )
+            .then( data => {} )
+            .catch( error => {} )
+
+        (1) 비동기식 통신
+        axios.HTTP메소드명( '통신할경로' , { BODY } , { OPTION } )
+            .then( response => { } )
+            .catch( error => {} )
+
+        (2) 동기식 통신
+        async ( ) => {
+            await axios.HTTP메소드명( '통신할경로' ,  { BODY } , { OPTION } )
+                .then( response => {} )
+                .catch( error => {} )
+        }
+
+        (3) 동기식 통신2
+        async ( ) => {
+            try{ const response = await axios.HTTP메소드명( '통신할경로' , { BODY }, { OPTION } )
+            }catch( e ) { }
+        }
+
+        [*]
+            1.  axios.HTTP메소드명  : axios.get() , axios.post() , axios.put() , axios.delete() 골라서 사용하기.
+            2. '통신할경로'          : 통신할 경로는 스프링의 controller 매핑 주소 작성한다.
+            3.  { BODY }           : post 또는 put HTTP메소드 사용시 본문을 전송할때 사용.
+            4.  { OPTION }         : HTTP Header 들의 정보들을 설정할 때 사용.
+            5. 응답결과
+                선택1 : axios.get().then( response => {} )
+                선택2 : const response = axios.get()      * 동기식 통신일때 사용하기
+            6. 기본값이 비동기 이므로 동기화 하는법
+                async 함수명 ( ) => {
+                    const response = await axios.get()
+                }

@@ -1,4 +1,31 @@
-// [2] 로그인 함수
+// [2] 로그인 함수, 시큐리티 사용시에는 form 형식
+const onLogin = () => {
+    // (1) Form 가져오기
+    const loginForm = document.querySelector("#loginForm")
+    // (2) FORM 데이터 객체
+    const formData = new FormData(loginForm);
+    // (3) fetch option
+    const option = {
+        method : "POST",
+        body : formData
+    }
+    // (4) fetch 통신
+    fetch('/member/login.do', option)
+       .then(r => r.json())
+       .then(d => {
+            if(d == true){
+                alert('로그인 성공');
+                location.href = "/"
+            }
+            else{alert('회원 정보가 일치하지 않습니다.');}
+        })
+       .catch(e => {alert('시스템 오류 : 관리자에게 문의하세요.');})
+}
+
+
+
+// [2] 로그인 함수, 시큐리티 사용한 이후에 사용하지 않는다.
+/*
 const onLogin = () => {
     console.log('함수 실행 됨.')
     // (1) input dom 가져오기 
@@ -25,3 +52,25 @@ const onLogin = () => {
         .catch(e => {alert('시스템 오류 : 관리자에게 문의하세요.'); console.log(e)})
     // (6) 결과에 따른 화면 제어 
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

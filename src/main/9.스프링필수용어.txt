@@ -1,0 +1,118 @@
+[ MVC1 패턴 ] : view 와 controller 를 한곳에 담당
+    - view/controller :
+    - model(dao/repository/mapper/dto)
+[ MVC2 패턴 ] : view 와 controller 각각 담당 ,
+    - view :
+    - controller :
+    - model(dao/repository/mapper/dto)
+[ MVC2 3tire ] : 기존의 mvc2 패턴에서 service(비지니스로직)별도로 담당 추가
+    - view :
+    - controller :
+    - service :
+    - model(dao/repository/mapper/dto) :
+
+[ IOC ] : Inversion of Control 제어의 역전
+    1. 정의 : 객체의 생성(new) 및 관리 의 제어권을 개발자가 아닌 스프링 프레임워크가 담당/위임 한다.
+    2. 스프링에서는 컨테이너 가 이를 대신 한다.
+    즉] 객체의 생성과 관리를 스프링이 한다.
+    3. 컨테이너에 위임하는 방법
+        @Component
+        @Controller @RestController @Service @Repository 등등 : 다른 기능들과 포함되여 제공한다.
+
+[ DI ] : Dependency Injection 의존성 주입
+    1. 정의 : 객체를 직접 생성하지 않고 외부(스프링 컨테이너) 로 부터 주입받도록 하는 방법
+    2. 객체들간의 결합도를 낮추고 유지보수성 향상한다.
+    3. 방법 @Autowired
+        (1) 필드에 주입 * 코드간결
+        @Autowired private 클래스명 변수명;
+
+        (2) 생성자로 주입  * 권장( final 수정불가능 )
+        private final 클래스명 변수명;
+        @Autowired
+        public 클래스명( 클래스명 매개변수명 ) {  this.변수명 = 매개변수명; }
+
+        (3) Setter 를 이용한 주입
+        클래스명 변수명;
+        public void setXXX( 클래스명 매개변수명 ){ this.변수명 = 매개변수명; }
+
+[ AOP ] : 관점 지향 프로그래밍
+    1. 정의 : 핵심 로직 과 공통(부가)기능 을 분리하는 프로그래밍 기법
+    2. 목적 :
+        1. 여러 메소드 에서 **중복되는 코드** 들을 공통 기능으로 분리하여 필요할때 *자동*으로 실행하는 방식
+        2. 핵심 로직은 깔끔하게 유지하고 공통 기능은 한곳에 관리하여 유지보수 용이
+    3. 주요 공통 기능
+        1. 로그(상태기록) 처리        @Slf4j
+        2. 트랜잭션                 @Transactional
+        3. 보안 검사                Spring Security
+        등등
+
+    4. 사용법
+        1. AOP 구현하기 위한 클래스 위에
+            @Aspect : 지정한 클래스는 AOP 설정하는 클래스임을 뜻
+            @Component : 스프링 컨테이너 빈 등록
+        2. 모듈 함수 위에
+            @Before : 메소드가 실행 하기전에 부가기능 실행 , 매개변수검사,로그,보안 등
+            @After : 메소드가 실행 후 부가기능 실행 , 로그,외부스트림연결/해제 등등
+            @AfterThrowing : 메소드가 실행 중 예외가 발생시 부가기능 실행 ,로그,트랜잭션 등
+            @AfterReturning : 메소드가 정상적으로 실행된 후 부가기능 실행 ,로그,캐시(기록)등등
+            @Around : 메소드가 실행 전후를 모두 감싸서 부가기능 실행 , 성능평가,모니터링,트랜잭션 등등
+
+        3. 모듈 함수에 함수 지정하기
+            1. @Before/@After/@AfterThrowing/@AfterReturning/@Around
+                @Before : 지정한 메소드가 실행하기전 부가기능 자동 실행
+            2. (  execution 문법 )
+                 @Before( "execution " )
+            3. (  execution ( * ) )
+                @Before( "execution ( * )" )
+                즉] 지정한 함수의 리턴 타입 의미 : * 와일드카드 , 모든 타입 뜻
+            4. ("execution( * /경로/클래스명.* )
+                TaskService3.*   : 지정한 클래스내 모든 메소드를 지정한다.
+                경로 : src->main 부터 경로 지정
+                즉] TaskService3 클래스의 모든 메소드 뜻
+            5. ("execution( * TaskService3.*(..) )")
+                (..) : 지정한 메소드들의 매개변수 타입, (..) , 모든 타입 매개변수 뜻
+
+
+[ POJO ] : Plain Old Java Object : 특정한 프레임워크나 라이브러리를 의존하지 않고 순수한 자바 객체
+
+[ 스프링 주요 장점 ]
+    1. POJO 기반으로 동작한다.
+    2. IOC 제어역전
+    3. DI 의존성 주입
+    4. AOP 관점지향프로그밍
+    5. MVC2 3tire 패턴 지원
+    + 호환성 : JPA/mybatis등등 , 유지보수 용이 , Rest Api
+
+문제1] MVC 패턴에서는 controller 에서 service 메소드를 호출하고 매개변수와 리턴 주고받는 행위
+    조건1 : Service 에 method1 함수를 선언한다.
+    조건2 : Controller 에서 Service 의 method1 메소드 를 호출하는 코드 방법 5가지 ( 자바방식, 스프링방식 )
+        [1 자바] 인스턴스 생성하여 메소드를 호출한다. (변수에 인스턴스 저장 )
+            클래스명 변수명 = new 생성자명();
+            변수명.메소드명();
+
+        [2 자바 ] 인스턴스 생성하여 메소드를 바로 호출한다. ( 1회성 : 변수에 인스턴스 저장하지 않았다. )
+            new 생성자명().메소드명();
+
+        [3 자바 ]
+            (1) 싱글톤
+                private static final 클래스명 싱글톤변수명 = new 생성자명();
+                private 클래스명(){}``
+                public static 클래스명 getInstance(){ return 싱글톤변수명; }
+            (2) 싱글톤 호출
+                클래스명.getInstance().메소드명();
+
+        [4 자바 ] : 호출할 메소드가 static 선언이면 ( 인스턴스NEW 가 없어도 된다 )
+            클래스명.메소드명();
+
+        [5 스프링(자바포함) ] IOC 와 DI 이용하여 사용자가 직접 new 하지 않고 인스턴스를 사용할 수 있도록 한다.
+            (1) 호출 하고자하는 클래스위에 컴포넌트 등록한다. @Component 또는 @Service 등등
+            (2) 호출 할 클래스에서 의존성 주입 받는다.
+                @Autowired 클래스명 변수명;
+                변수명.메소드명();
+
+    * 권장 : 스프링프로젝트에는 5번 사용권장 , 아니면 3번싱글톤 사용권장
+
+문제2] StudentService 의 모든 메소드에서 해당 하는 메소드가 실행될때마다 자바 콘솔에 실행전 AOP 자동 실행하기.
+    조건1] StudentService의 모든 메소드가 실행 되기전에 'studentService발동' 이라는 문구 자동 출력 하시오.
+    참고] TaskSecurity클래스 참고하여 config 폴더에 새로운 AOP 설정 클래스 생성하여 구현
+    테스트] Talend API 테스트 진행
