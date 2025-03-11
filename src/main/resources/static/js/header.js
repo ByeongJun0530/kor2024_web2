@@ -16,7 +16,9 @@ const getLoginMid = () => {
             html += `
                  <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <img src="/img/${d.mimg}" style="width:70px; border-radius:20px; border : 1px"/>
+                        <img
+                            src="${d.mimg.includes('http') ? d.mimg : '/img/'+d.mimg}"
+                            style="width:50px; height:50px; border-radius:30px; border : 1px"/>
                         ${d.mid}님
                     <span class = "pointBox"></span> </a>
                  </li>

@@ -1,0 +1,25 @@
+[ 타입 메모장 ]
+1. 타입
+    1. 기본 타입
+        byte
+        int
+        short
+        long
+        float
+        double
+        boolean
+        char
+    2. 참조 타입
+        열거타입 :
+        배열타입 : String[], ArrayList[]
+        Class 타입 : String, ArrayList, Math, Dto, Dao
+        Interface 타입 : List, Map, mapper 등등
+
+2. 이름 정의 (관례)
+    자바에서 첫 글자를 대문자로 쓰는 경우 : 클래스명, 인터페이스명, 어노테이션
+    자바에서 첫 글자를 소문자로 쓰는 경우 : 메소드명, 변수명, 매개변수명?
+
+3. 타입, 변수, 변수값 차이 :
+    타입 : 데이터의 종류, 형태
+    변수 : 데이터를 담을 수 있는 메모리 공간
+    변수값 : 메모리 공간에 담긴 값
