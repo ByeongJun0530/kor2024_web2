@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 // ====== 템플릿 반환하는 컨트롤러 클래스 ====== //
 @Controller
 public class ViewController {
+    // [*] 403(권한 접근 차단 매핑)
+    @GetMapping("/error403")
+    private String error403(){return "error403.html";}
 
     // [1] 메인페이지를 반환해주는 메소드
     @GetMapping("") // http://localhost:8080/

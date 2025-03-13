@@ -24,11 +24,20 @@ public class SecurityConfig {
                     // 3-3 : 채팅페이지(chat)에는 로그인 회원이면서 Role 이 USER 인 회원만 접근할 수 있다.
                     // 3-4 : 관리자 페이지(admin)에는 로그인 회원이면서 Role 이 admin 이거나 team1 회원만 접근할 수 있다.
                     http
-                            .requestMatchers(AntPathRequestMatcher.antMatcher("/board/write")).authenticated()
-                            .requestMatchers(AntPathRequestMatcher.antMatcher("/chat")).hasRole("USER")
-                            .requestMatchers(AntPathRequestMatcher.antMatcher("/admin")).hasAnyRole("admin", "team1")
-                            .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll();
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/board/write")).authenticated() // 인증(로그인) 된 모든 회원
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/chat")).hasRole("USER") // 로그인된 모든 회원 접속
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/api1")).hasAnyRole("GENERAL") // 일반 회원만 접속
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/api2")).hasAnyRole("OAUTH") // OAUTH 회원만 접속
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/admin")).hasAnyRole("ADMIN", "TEAM1") // ADMIN 또는 TEAM1 회원만 접속
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll(); // 그 외 모든 접속자 허용
         });
+
+            // [3**] 403 에러 메시지는 권한이 없을 때 페이지 접근 차단.
+            // 403 에러 페이지를 핸들러(매핑) 하기.
+        httpSecurity.exceptionHandling((e) ->
+            e.accessDeniedHandler((request, response, accessDeniedException) -> {response.sendRedirect("/error403");  }) // URL 반환 // 403 에러 핸들러
+        );
+
 
         // [4] CSRF : post/put (Body) 요청을 금지, 특정한 URL 만 post/put 가능하도록 수동 허용
         // 개발 : CSRF 사용 안 함, 개발 환경에서는 끄고 사용하는 경우가 많다.

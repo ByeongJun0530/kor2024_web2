@@ -3,6 +3,7 @@ package korweb.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import korweb.model.dto.LoginDto;
 import korweb.model.dto.MemberDto;
 import korweb.model.dto.PointDto;
 import korweb.model.entity.MemberEntity;
@@ -10,6 +11,8 @@ import korweb.model.entity.PointEntity;
 import korweb.model.repository.MemberRepository;
 import korweb.model.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,8 +77,20 @@ public class MemberService implements UserDetailsService, OAuth2UserService<OAut
         }
 
         // (9) DefaultOauth2User 타입으로 리턴 해야한다. 매개변수 3가지 : (1) 권한(Role)목록 (2) 사용자정보 (3) 식별키
-        DefaultOAuth2User user = new DefaultOAuth2User(null, profile, "nickname");
-        return user;
+        // DefaultOAuth2User user = new DefaultOAuth2User(null, profile, "nickname");
+        // return user;
+
+        // (*) 권한부여하기.
+        List<GrantedAuthority> 권한목록 = new ArrayList<>();
+        권한목록.add(new SimpleGrantedAuthority("ROLE_USER"));
+        권한목록.add(new SimpleGrantedAuthority("ROLE_OAUTH"));
+
+        LoginDto loginDto = LoginDto.builder()
+                .mid(nickname) // oauth2 회원은 패스워드가 없다.
+                .mrolList(권한목록) // LoginDto 에 권한목록 넣어주기
+                .build();
+        return loginDto; // 현재 메소드의 반환 타입이 'OAuth2User' 이지만
+        // LoginDto 에서 'OAuth2User' 구현 했으므로 가능하다.
     }
 
     @Autowired private MemberRepository memberRepository;
@@ -183,10 +198,25 @@ public class MemberService implements UserDetailsService, OAuth2UserService<OAut
             // User : 클래스, UserDetails 를 구현하는 구현(객)체
                 // -> 시큐리티는 UserDetails 반환 하면 자동으로 로그인 처리를 해준다.
                 // 단] 입력받은 id 와 입력받은 id의 암호화 된 password 넣어줘야 한다.
-        UserDetails user = User.builder().username(mid).password(password).build();
+        // UserDetails user = User.builder().username(mid).password(password).build();
+
+        // (*) 권한/등급 부여하기. GrantedAuthority : 시큐리티 사용자의 권한 조작하는 인터페이스
+        // SimpleGrantedAuthority : 시큐리티 사용자의 권한 클래스(구현체)
+        List<GrantedAuthority> 권한목록 = new ArrayList<>();
+        권한목록.add(new SimpleGrantedAuthority("ROLE_USER")); // 권한명 규칙 : ROLE_권한명
+        권한목록.add(new SimpleGrantedAuthority("ROLE_GENERAL")); // 권한은 여러개 넣을 수 있다.
+        // DB에 존재하는 권한으로 부여할 수 있다."ROLE_ +변수명"
+
+        LoginDto loginDto = LoginDto.builder()
+                .mid(mid)
+                .mpwd(password)
+                .mrolList(권한목록) // LoginDto 에 권한목록을 넣어주기
+                .build();
 
         // (5) UserDetails
-        return user;
+        //return user;
+        return loginDto; // 반환타입이 'UserDetails' 이지만 LoginDto로 반환해도 되는 이유.
+        // LoginDto 에서 UserDetails 를 구현(implements) 했으므로 가능하다.
     }
 
     // =========== 세션 관련 함수 =========== //
@@ -216,15 +246,17 @@ public class MemberService implements UserDetailsService, OAuth2UserService<OAut
             // userDetails : 일반회원 타입 vs Oauth2User : oauth2 회원 타입 ---> 타입별 구분 해야한다, 통합이 필요하다.
             // (4) 현재 로그인 된 회원의 id 반환
         String loginMid = "";
-            if(object instanceof UserDetails){ // 객체 instanceof 타입 : 객체가 지정한 타입인지 확인하는 키워드, 객체가 해당 타입이면 true 아니면 false
-            // 현재 로그인 세션이 UserDetails(일반회원) 타입이면
-            UserDetails userDetails = (UserDetails)object;
-            loginMid = userDetails.getUsername();
-        }else if(object instanceof DefaultOAuth2User){
-            // 현재 로그인 세션이 DefaultOAuth2User(oauth2 회원) 타입이면
-            DefaultOAuth2User oAuth2User = (DefaultOAuth2User)object;
-            loginMid = oAuth2User.getAttributes().get("nickname").toString();
-        }
+//            if(object instanceof UserDetails){ // 객체 instanceof 타입 : 객체가 지정한 타입인지 확인하는 키워드, 객체가 해당 타입이면 true 아니면 false
+//            // 현재 로그인 세션이 UserDetails(일반회원) 타입이면
+//            UserDetails userDetails = (UserDetails)object;
+//            loginMid = userDetails.getUsername();
+//        }else if(object instanceof DefaultOAuth2User){
+//            // 현재 로그인 세션이 DefaultOAuth2User(oauth2 회원) 타입이면
+//            DefaultOAuth2User oAuth2User = (DefaultOAuth2User)object;
+//            loginMid = oAuth2User.getAttributes().get("nickname").toString();
+//        }
+        LoginDto loginDto = (LoginDto)object;
+        loginMid = loginDto.getMid();
         // (5) 로그인 된 mid를 반환한다.
         return loginMid;
     }

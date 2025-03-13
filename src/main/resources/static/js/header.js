@@ -43,15 +43,17 @@ getLoginMid(); // JS가 실행될 때. 로그인 정보 요청 함수 호출
 
 // [2] 로그아웃 함수 
 const logOut = () => {
+    // 시큐리티 이후에는 fetch로 로그아웃이 아닌 get 방식으로 시큐리티 로그아웃을 요청한다.
+    location.href="/member/logout.do";
     // 1. fetch option
-    const option = {method : "GET"}
-    // 2. fetch 
-    fetch('/member/logout.do', option)
-        .then(r => r.json())
-        .then(d => {
-            if(d == true){alert("로그아웃 성공"); location.href = "/member/login";}
-        })
-        .catch(e => console.log(e))
+    //const option = {method : "GET"}
+    // 2. fetch
+    //fetch('/member/logout.do', option)
+        //.then(r => r.json())
+        //.then(d => {
+            //if(d == true){alert("로그아웃 성공"); location.href = "/member/login";}
+        //})
+        //.catch(e => console.log(e))
 } // f end
 
 // [3] 내 포인트 함수
