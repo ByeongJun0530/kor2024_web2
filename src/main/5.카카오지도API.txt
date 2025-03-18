@@ -1,0 +1,43 @@
+[ 카카오지도 API ]
+    1. https://apis.map.kakao.com/
+    2. [web] 클릭
+    3. 사이드바 [Guide] 클릭
+        1. 카카오 개발자사이트 (https://developers.kakao.com) 접속
+        2. [로그인] * 계정이 없다면 강사 appkey 사용하기.  (강사)JavaScript 키 : 1ac4a57d8a5927d34020a891fcdbbcbd
+        3. 상단 메뉴 [ 내 애플리케이션 ] 클릭
+            + 내 애플리케이션 추가
+                1. 앱 이름 : 아무거나(임의) , kor2024web2
+                2. 회사명 : 아무거나(임의) , 교육기관
+                3. 카테고리 : 아무거나(임의) , 교육
+                * 체크박스 v
+                [저장]
+        4. 추가된 '애플리케이션명' 클릭 해서 들어가기
+    4. 사이드바 메뉴
+        [앱키] JavaScript  키 확인.
+        [플랫폼]
+            1. [Web 플랫폼 등록] 클릭
+            2. 기본 도메인인 'http://localhost:8080' 입력후 저장
+        [카카오맵]
+            *활성화 설정 : OFF 클릭해서 ON 변경    ( 2024년 12월 이후 개정 )
+
+[ 카카오지도 API 코드 연동 ]
+    1. <div id="map" style="width:500px;height:400px;"></div>
+    2. <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은 APP KEY를 넣으시면 됩니다."></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

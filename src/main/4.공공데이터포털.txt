@@ -1,0 +1,53 @@
+[ 활용 가능한 API ]
+    1. 공공데이터포털(정부) : https://www.data.go.kr/
+    2. 여행(정부) : https://api.visitkorea.or.kr
+    3. 영화(정부) : https://www.kobis.or.kr/kobisopenapi/homepg/main/main.do
+    4. 부동산(정부) : https://rt.molit.go.kr/
+    5. 카카오API(로그인/지도) : https://developers.kakao.com/
+    6. 네이버API : https://developers.naver.com/main/
+    7. 결제API : https://portone.io/korea/ko
+    등등 , 그외 검색 하거나 강사의 문의
+
+[ 공공데이터 포털 ]
+    - 국가에서 보유한 정보/데이터 제공 하는 홈페이지
+    1. [로그인] (네이버/카카오) 로그인진행 , *강의기준 로그인 불가능하면 강사 코드 사용
+    2. 검색창 '필요한 api명' 검색
+
+[실습1]
+    (신청 방법 )
+    인천광역시 부평구_인구 현황 : https://www.data.go.kr/data/3044322/fileData.do
+    1. [ 오픈API ] 탭 클릭
+    2. [ 활용신청 ] 버튼 클릭
+        활용목적 :  연구(논문 등) 선택
+            테스트
+        이용허락범위 :  [동의합니다.] 체크
+    3. 1~3분 대기
+    --- 신청 완료
+    1. [ 마이페이지 ] -> [활용신청 현황] 페이지 에서 목록에 신청한 API 선택
+    2. '개발계정 상세보기' 페이지
+        일반 인증키(Encoding) : 본인키 확인
+        일반 인증키(Decoding) : 본인키 확인
+    3. [인증키 설정] 버튼 클릭
+        In: header VALUE : 일반 인증키(Encoding)키
+        In: query VALUE : 일반 인증키(Decoding)키
+    4. [OPEN API 실행준비] 클릭
+    5. [OPEN API 호출 ] 클릭
+        request url 확인
+            https://api.odcloud.kr/api/3044322/v1/uddi:466eee86-a8be-447b-9c8e-802bdbe897d7?page=1&perPage=10&serviceKey=nwPZ%2F9Z3sVtcxGNXxOZfOXwnivybRXYmyoIDyvU%2BVDssxywHNMU2tA55Xa8zvHWK0bninVkiuZAA4550BDqIbQ%3D%3D
+        perPage=23 으로 수정
+            https://api.odcloud.kr/api/3044322/v1/uddi:466eee86-a8be-447b-9c8e-802bdbe897d7?page=1&perPage=23&serviceKey=nwPZ%2F9Z3sVtcxGNXxOZfOXwnivybRXYmyoIDyvU%2BVDssxywHNMU2tA55Xa8zvHWK0bninVkiuZAA4550BDqIbQ%3D%3D
+
+    ( 내 홈페이지 호출하는 방법 ) Fetch 이용한 공공데이터 호출
+
+[실습2]
+    국세청_사업자등록정보 진위확인 및 상태조회 서비스 : https://www.data.go.kr/data/15081808/openapi.do
+    (신청 방법- 위와 동일 생략)
+
+[실습3]
+    인천광역시 부평구_맛있는 집(맛집) 현황 : https://www.data.go.kr/data/15103411/fileData.do
+    (신청 방법- 위와 동일 생략)
+
+
+
+
+

@@ -1,0 +1,17 @@
+
+
+.infobox{
+    margin-top : 50px; /* 상단 바깥여백 */
+    display : flex; /* 하위 요소들 가로배치  */
+    justify-content : space-between; /* 하위 요소들 가로 정렬 */
+}
+.btitle{
+    margin-top : 20px;
+    text-align : center; /* 하위 요소 내용물 가로 가운데 정렬*/
+    font-size : 25px;
+}
+.bcontent{
+    margin-top : 15px;
+    min-height : 300px; /* 최소 높이. */
+}
+
